@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "848207464623",
+    "project_id": "calculator-app-c25cb",
+    "storage_bucket": "calculator-app-c25cb.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:848207464623:android:ff5cf814e1a4f14f44ac5a",
+        "android_client_info": {
+          "package_name": "com.yosry.dev.calculator"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCE81lNdvfH3_EUpsmFDGUZvsi1ej6XvsU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
