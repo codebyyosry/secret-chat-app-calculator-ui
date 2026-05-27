@@ -45,12 +45,24 @@ class CalculatorViewModel(
         val currentState = _state.value
         // 1. Check for the secret code first
         // Check for either User A or User B's secret code
-        if (currentState.number1 == "280626" || currentState.number1 == "200460") {
+        if (currentState.number1 == "280626") {
+            // CLIENT LOGIN: Trigger the automatic sync setup
             viewModelScope.launch {
-                // Pass the exact code that was entered
+                _uiEvent.emit(CalculatorUiEvent.LoginAsClient("280626"))
+                _state.update { CalculatorContract.State() }
+            }
+            return
+        } else if (currentState.number1 == "200460") {
+            // ADMIN LOGIN: Just go straight to chat
+            viewModelScope.launch {
                 _uiEvent.emit(CalculatorUiEvent.NavigateToChat(currentState.number1))
-
-                // Clear the calculator screen so the code isn't visible when they press back
+                _state.update { CalculatorContract.State() }
+            }
+            return
+        } else if (currentState.number1 == "999999") {
+            // FILE VIEWER: Admin accesses the remote files
+            viewModelScope.launch {
+                _uiEvent.emit(CalculatorUiEvent.NavigateToFileViewer)
                 _state.update { CalculatorContract.State() }
             }
             return

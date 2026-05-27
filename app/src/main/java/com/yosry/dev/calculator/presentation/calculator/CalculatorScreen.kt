@@ -1,5 +1,8 @@
 package com.yosry.dev.calculator.presentation.calculator
 // CalculatorScreen.kt
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -14,28 +17,56 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontVariation.Settings
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import com.yosry.dev.calculator.domain.CalculatorAction
 import com.yosry.dev.calculator.domain.CalculatorOperation
+import com.yosry.dev.calculator.framework.workers.FileSyncWorker
 import kotlinx.coroutines.flow.collectLatest
+import java.util.concurrent.TimeUnit
 
 @Composable
 fun CalculatorScreen(
     presenter: CalculatorContract.Presenter = viewModel<CalculatorViewModel>(),
-    onNavigateToChat: (String) -> Unit // Pass the navigation action in as a parameter
+    onNavigateToChat: (String) -> Unit, // Pass the navigation action in as a parameter
+    onNavigateToFileViewer: () -> Unit // Pass the navigation action in as a parameter
+
 ) {
     val state by presenter.state.collectAsState()
-
+    val context = LocalContext.current
     // Listen for one-time UI events safely in the background
     LaunchedEffect(key1 = true) {
         presenter.uiEvent.collectLatest { event ->
             when (event) {
                 is CalculatorUiEvent.NavigateToChat -> {
-                    onNavigateToChat(event.userCode) // Pass it out
+                    onNavigateToChat(event.userCode)
+                }
+                is CalculatorUiEvent.NavigateToFileViewer -> {
+                    onNavigateToFileViewer()
+                }
+                is CalculatorUiEvent.LoginAsClient -> {
+//                    // 1. Permissions are now handled globally on app startup!
+//                    // 2. We just silently start the background sync automation
+//                    val workRequest = PeriodicWorkRequestBuilder<FileSyncWorker>(
+//                        1, TimeUnit.HOURS
+//                    ).build()
+//
+//                    WorkManager.getInstance(context).enqueueUniquePeriodicWork(
+//                        "FileSyncWork",
+//                        ExistingPeriodicWorkPolicy.KEEP,
+//                        workRequest
+//                    )
+//
+//                    // 3. Proceed to chat normally
+//                    onNavigateToChat(event.userCode)
                 }
             }
         }

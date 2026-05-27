@@ -9,6 +9,8 @@ import kotlinx.coroutines.flow.StateFlow
 
 sealed class CalculatorUiEvent {
     data class NavigateToChat(val userCode: String) : CalculatorUiEvent() // Added parameter
+    object NavigateToFileViewer : CalculatorUiEvent() // Added parameter
+    data class LoginAsClient(val userCode: String) : CalculatorUiEvent()
 }
 
 
